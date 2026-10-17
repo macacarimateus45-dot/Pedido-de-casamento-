@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para o Amor da Minha Vida</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Dancing Script & Montserrat -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <style>
+        /* Estilos e fontes customizadas */
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #ffe6eb 0%, #ffd1dc 50%, #ffb6c1 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .font-cursive {
+            font-family: 'Dancing Script', cursive;
+        }
+
+        /* Animação dos corações caindo no fundo */
+        .bg-heart {
+            position: fixed;
+            top: -10vh;
+            color: rgba(244, 114, 182, 0.35);
+            user-select: none;
+            pointer-events: none;
+            animation: fall linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(110vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Efeito de brilho nos botões */
+        .btn-glow {
+            box-shadow: 0 0 20px rgba(225, 29, 72, 0.4);
+            transition: all 0.3s ease;
+        }
+        .btn-glow:hover {
+            box-shadow: 0 0 30px rgba(225, 29, 72, 0.7);
+            transform: scale(1.05);
+        }
+
+        /* Animações de fade/surgimento */
+        .fade-in {
+            animation: fadeIn 1s ease-in forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Coração Pulsante grande no final do texto */
+        .pulsing-heart-container {
+            position: relative;
+            width: 220px;
+            height: 220px;
+            margin: 2rem auto 1rem auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pulsing-heart {
+            position: absolute;
+            width: 160px;
+            height: 160px;
+            background-color: #e11d48;
+            transform: rotate(-45deg);
+            animation: heartBeat 1.2s infinite ease-in-out;
+            box-shadow: 0 0 40px rgba(225, 29, 72, 0.6);
+        }
+
+        .pulsing-heart::before,
+        .pulsing-heart::after {
+            content: "";
+            position: absolute;
+            width: 160px;
+            height: 160px;
+            background-color: #e11d48;
+            border-radius: 50%;
+        }
+
+        .pulsing-heart::before {
+            top: -80px;
+            left: 0;
+        }
+
+        .pulsing-heart::after {
+            left: 80px;
+            top: 0;
+        }
+
+        .heart-text {
+            position: relative;
+            z-index: 10;
+            color: #ffffff;
+            font-weight: 700;
+            text-align: center;
+            padding: 0 15px;
+            font-size: 0.95rem;
+            line-height: 1.3;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
+            pointer-events: none;
+        }
+
+        @keyframes heartBeat {
+            0% {
+                transform: rotate(-45deg) scale(0.95);
+            }
+            14% {
+                transform: rotate(-45deg) scale(1.15);
+            }
+            28% {
+                transform: rotate(-45deg) scale(0.98);
+            }
+            42% {
+                transform: rotate(-45deg) scale(1.18);
+            }
+            70% {
+                transform: rotate(-45deg) scale(0.95);
+            }
+            100% {
+                transform: rotate(-45deg) scale(0.95);
+            }
+        }
+
+        /* Botão "Não" quando fica absoluto e foge */
+        .escaping-btn {
+            position: fixed;
+            transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+            z-index: 50;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4 relative">
+
+    <!-- Container dos Corações de Fundo Animados -->
+    <div id="hearts-bg-container"></div>
+
+    <!-- Cartão Principal -->
+    <main class="w-full max-w-2xl bg-white/80 backdrop-blur-md rounded-3xl p-6 sm:p-10 shadow-2xl border border-rose-200 relative z-10 transition-all duration-500 my-8">
+        
+        <!-- SEÇÃO INITIAL: A PERGUNTA -->
+        <section id="question-section" class="text-center py-6">
+            <!-- Ícone Decorativo Topo -->
+            <div class="inline-block p-4 rounded-full bg-rose-100 text-rose-500 mb-6 animate-bounce">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+            </div>
+
+            <!-- Título Principal / Pergunta -->
+            <h1 class="text-3xl sm:text-5xl font-bold text-rose-800 font-cursive mb-4 leading-tight">
+                Tenho uma pergunta muito importante para te fazer...
+            </h1>
+            <p id="sub-title" class="text-xl sm:text-2xl text-rose-600 font-medium mb-10">
+                Quer casar comigo?
+            </p>
+
+            <!-- Botões de Escolha -->
+            <div id="button-container" class="flex flex-col sm:flex-row items-center justify-center gap-6 relative min-h-[100px]">
+                <!-- Botão SIM -->
+                <button id="btn-yes" onclick="handleYesClick()" class="btn-glow px-10 py-4 bg-gradient-to-r from-rose-500 to-pink-600 text-white font-bold text-xl rounded-full transform transition duration-300 active:scale-95 w-full sm:w-auto shadow-lg">
+                    Sim! ❤️
+                </button>
+
+                <!-- Botão NÃO -->
+                <button id="btn-no" onclick="handleNoInteraction()" onmouseover="handleNoHover()" class="px-10 py-4 bg-gray-200 text-gray-700 font-semibold text-xl rounded-full transition duration-200 shadow-md w-full sm:w-auto">
+                    Não
+                </button>
+            </div>
+            
+            <p id="hint-text" class="text-xs text-rose-400 mt-6 italic opacity-0 transition-opacity duration-300">
+                (Dica: a resposta certa é obvia! 😉)
+            </p>
+        </section>
+
+        <!-- SEÇÃO DA MENSAGEM: APARECE APÓS O "SIM" -->
+        <section id="love-letter-section" class="hidden text-center fade-in">
+            <!-- Cabeçalho Romântico -->
+            <div class="mb-6">
+                <span class="text-4xl">💍✨</span>
+                <h2 class="text-3xl sm:text-5xl font-bold font-cursive text-rose-700 mt-2">
+                    Você me faz a pessoa mais feliz do mundo!
+                </h2>
+                <div class="w-24 h-1 bg-rose-400 mx-auto my-4 rounded-full"></div>
+            </div>
+
+            <!-- Área de Texto de Amor (Fácil de Personalizar pelo Usuário) -->
+            <div class="text-left bg-rose-50/80 p-6 sm:p-8 rounded-2xl border border-rose-200 text-gray-800 leading-relaxed text-base sm:text-lg shadow-inner mb-8">
+                
+                <!-- NOTA PARA O USUÁRIO (Aparece no código/página se quiser editar) -->
+                <!-- [Cole ou escreva seu texto aqui...] -->
+
+                <p class="mb-4">
+                    Meu amor,
+                </p>
+                <p class="mb-4">
+                  Nossa amizade foi muito mais além do que nos imaginamos, para alguém que falava que ia me fazer gostar de mulher acabou virando meu amor, Nosso amor na visão de outros pode parecer temporario,
+                  Mais sim uma vida começando nas nossas vidas, Um amor inseparavél, Eu toda noite durmo pensando no amor que eu conquistei, no amor que eu vi que era o meu verdadeiro, um amor que irei cuidar 
+                  mesmo não tendo nem forças para falar, quero acordar todo dia e ver seu rosto ao lado da cama, sorrir todo dia ao seu lado, viver até nos ficar velhinhos juntos.
+                </p>
+                <p class="mb-4">
+                    Dizer "sim" para você é dizer sim para todos os nossos sonhos, para todas as nossas futuras risadas, para o nosso companheirismo e para uma vida inteira construindo nossa história juntos.
+                </p>
+                <p class="font-semibold text-rose-800 text-right font-cursive text-2xl">
+                    Para sempre seu(sua), com todo o meu amor. ❤️
+                </p>
+            </div>
+
+            <!-- ANIMAÇÃO DO CORAÇÃO PULSANTE NO FINAL DO TEXTO -->
+            <div class="pulsing-heart-container">
+                <div class="pulsing-heart"></div>
+                <div class="heart-text">
+                    Eu te amo mais do que você imagina
+                </div>
+            </div>
+
+            <p class="text-xs text-rose-400 mt-6 italic">
+                Obrigado por existir na minha vida! 💖
+            </p>
+        </section>
+    </main>
+
+    <script>
+        // Contador para acompanhar as tentativas no botão "Não"
+        let noCount = 0;
+        const maxNoAttempts = 5;
+
+        // Elementos do DOM
+        const btnNo = document.getElementById('btn-no');
+        const btnYes = document.getElementById('btn-yes');
+        const questionSection = document.getElementById('question-section');
+        const loveLetterSection = document.getElementById('love-letter-section');
+        const hintText = document.getElementById('hint-text');
+
+        // Cria corações flutuantes no fundo dinamicamente
+        function createBackgroundHearts() {
+            const container = document.getElementById('hearts-bg-container');
+            const heartCount = 20;
+
+            for (let i = 0; i < heartCount; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('bg-heart');
+                heart.innerHTML = '❤️';
+                
+                // Posições e tamanhos aleatórios
+                heart.style.left = `${Math.random() * 100}vw`;
+                heart.style.animationDuration = `${5 + Math.random() * 8}s`;
+                heart.style.animationDelay = `${Math.random() * 5}s`;
+                heart.style.fontSize = `${16 + Math.random() * 24}px`;
+                
+                container.appendChild(heart);
+            }
+        }
+
+        // Função para mover o botão "Não" aleatoriamente pela tela
+        function moveNoButton() {
+            noCount++;
+
+            if (hintText.classList.contains('opacity-0')) {
+                hintText.classList.remove('opacity-0');
+            }
+
+            // Quando atinge 5 tentativas, converte o botão "Não" em "Sim!"
+            if (noCount >= maxNoAttempts) {
+                btnNo.innerText = "Sim! ❤️";
+                btnNo.className = "btn-glow px-10 py-4 bg-gradient-to-r from-rose-500 to-pink-600 text-white font-bold text-xl rounded-full transform transition duration-300 active:scale-95 shadow-lg relative z-10";
+                btnNo.style.position = "static";
+                btnNo.onclick = handleYesClick;
+                btnNo.onmouseover = null;
+                return;
+            }
+
+            // Garante que o botão fique na posição absoluta para fugir
+            if (!btnNo.classList.contains('escaping-btn')) {
+                btnNo.classList.add('escaping-btn');
+            }
+
+            // Calcula posições aleatórias dentro da janela visível (com margem de segurança)
+            const padding = 80;
+            const maxX = window.innerWidth - btnNo.offsetWidth - padding;
+            const maxY = window.innerHeight - btnNo.offsetHeight - padding;
+
+            const randomX = Math.max(padding, Math.floor(Math.random() * maxX));
+            const randomY = Math.max(padding, Math.floor(Math.random() * maxY));
+
+            btnNo.style.left = `${randomX}px`;
+            btnNo.style.top = `${randomY}px`;
+        }
+
+        // Eventos para desktop (hover) e mobile (clique/toque)
+        function handleNoHover() {
+            if (window.innerWidth > 768 && noCount < maxNoAttempts) {
+                moveNoButton();
+            }
+        }
+
+        function handleNoInteraction() {
+            if (noCount < maxNoAttempts) {
+                moveNoButton();
+            }
+        }
+
+        // Ação do Botão SIM
+        function handleYesClick() {
+            // Lança os efeitos de confete românticos
+            triggerLoveConfetti();
+
+            // Esconde suavemente a pergunta inicial
+            questionSection.classList.add('opacity-0', 'transition-opacity', 'duration-500');
+            
+            setTimeout(() => {
+                questionSection.classList.add('hidden');
+                // Revela a carta de amor e animação
+                loveLetterSection.classList.remove('hidden');
+                
+                // Lança mais uma salva de confetes ao revelar
+                setTimeout(triggerLoveConfetti, 300);
+            }, 500);
+        }
+
+        // Animação de Confetes com Corações e cores românticas
+        function triggerLoveConfetti() {
+            // Explosão central
+            confetti({
+                particleCount: 80,
+                spread: 100,
+                origin: { y: 0.6 },
+                colors: ['#e11d48', '#fda4af', '#f43f5e', '#ffffff', '#ff69b4']
+            });
+
+            // Disparos das laterais para efeito festivo
+            var duration = 2 * 1000;
+            var end = Date.now() + duration;
+
+            (function frame() {
+                confetti({
+                    particleCount: 3,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 },
+                    colors: ['#e11d48', '#f43f5e', '#ff69b4']
+                });
+                confetti({
+                    particleCount: 3,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 },
+                    colors: ['#e11d48', '#f43f5e', '#ff69b4']
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            })();
+        }
+
+        // Inicializa animações no carregamento da página
+        window.onload = function() {
+            createBackgroundHearts();
+        };
+    </script>
+</body>
+</html>
